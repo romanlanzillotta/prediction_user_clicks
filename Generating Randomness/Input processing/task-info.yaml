@@ -1,0 +1,162 @@
+type: edu
+files:
+- name: predictor/predictor.py
+  visible: true
+  text: |
+    # write your code here
+  learner_created: false
+- name: test/__init__.py
+  visible: false
+  learner_created: false
+- name: test/tests.py
+  visible: false
+  text: |
+    from hstest import CheckResult, StageTest, dynamic_test, TestedProgram
+
+    ASK_RANDOM_STRING = "Print a random string containing 0 or 1:"
+
+    # Case test
+    test_data_1 = [
+        {
+            "start": {"expected": ASK_RANDOM_STRING, "feedback": "The program should ask for a random string!"},
+            "test_cases": [
+                {
+                    "case": "1010101101010",
+                    "verify": [
+                        {
+                            "expected": "current data length",
+                            "feedback": "'current data length' is not found in the output!"},
+                        {"expected": "13", "feedback": "Value for 'data length' is wrong!"},
+                        {"expected": "87", "feedback": "Value for for 'symbol left' is wrong!"},
+                        {"expected": ASK_RANDOM_STRING, "feedback": f"The program should ask for a random string!"},
+                    ]
+                },
+                {
+                    "case": "1010100111001010010101001010100001010001",
+                    "verify": [
+                        {
+                            "expected": "current data length",
+                            "feedback": "'current data length' is not found in the output!"},
+                        {"expected": "53", "feedback": "Value for 'data length' is wrong!"},
+                        {"expected": "47", "feedback": "Value for for 'symbol left' is wrong!"},
+                        {"expected": ASK_RANDOM_STRING, "feedback": f"The program should ask for a random string!"},
+                    ]
+                },
+                {
+                    "case": "01010000100101011010001001",
+                    "verify": [
+                        {
+                            "expected": "current data length",
+                            "feedback": "'current data length' is not found in the output!"},
+                        {"expected": "79", "feedback": "Value for 'data length' is wrong!"},
+                        {"expected": "21", "feedback": "Value for for 'symbol left' is wrong!"},
+                        {
+                            "expected": ASK_RANDOM_STRING,
+                            "feedback": "The program should ask for a random string!"},
+                    ]
+                },
+                {
+                    "case": "00010101110100010101",
+                    "verify": [
+                        {
+                            "expected": "current data length",
+                            "feedback": "'current data length' is not found in the output!"
+                        },
+                        {"expected": "99", "feedback": "Value for 'data length' is wrong!"},
+                        {"expected": "1", "feedback": "Value for for 'symbol left' is wrong!"},
+                        {
+                            "expected": ASK_RANDOM_STRING,
+                            "feedback": "The program should ask for a random string!"},
+                    ]
+                },
+                {
+                    "case": "01",
+                    "verify": [
+                        {
+                            "expected": "Final data string:",
+                            "feedback": "'Final data string:' is not found in the output!"
+                        },
+                        {
+                            "expected": "10101011010101010100111001010010101001010100001010001010100001001010110100010010001010111010001010101",
+                            "feedback": "Final data string is wrong!"
+                        },
+                    ]
+                },
+            ]
+        },
+        {
+            "start": {"expected": ASK_RANDOM_STRING, "feedback": "The program should ask for a random string!"},
+            "test_cases": [
+                {
+                    "case": "1010100111001010010101001010100001010001_some_more_wrong_symbols",
+                    "verify": [
+                        {
+                            "expected": "current data length",
+                            "feedback": "'current data length' is not found in the output!"},
+                        {"expected": "40", "feedback": "Value for 'data length' is wrong!"},
+                        {"expected": "60", "feedback": "Value for for 'symbol left' is wrong!"},
+                        {"expected": ASK_RANDOM_STRING, "feedback": f"The program should ask for a random string!"},
+                    ]
+                },
+                {
+                    "case": "010000101000101010000100101011010001001000101011101000101010",
+                    "verify": [
+                        {
+                            "expected": "Final data string:",
+                            "feedback": "'Final data string:' is not found in the output!"
+                        },
+                        {
+                            "expected": "1010100111001010010101001010100001010001010000101000101010000100101011010001001000101011101000101010",
+                            "feedback": "Final data string is wrong!"
+                        },
+                    ]
+                },
+            ]
+        },
+    ]
+
+
+    class GenRandTest(StageTest):
+
+        def __init__(self, *args, **kwargs):
+            super().__init__(*args, **kwargs)
+            self.output = None
+
+        def case_test(self, dict_):
+            """Tests case/expected"""
+            t = TestedProgram()
+            self.output = t.start()
+            if dict_["start"]["expected"].lower() not in self.output.lower():
+                return CheckResult.wrong(dict_["start"]["feedback"])
+
+            for test_case in dict_["test_cases"]:
+                self.output = t.execute(test_case["case"])
+                for item in test_case["verify"]:
+                    if item["expected"].lower() not in self.output.lower():
+                        return CheckResult.wrong(item["feedback"])
+            return CheckResult.correct()
+
+        @dynamic_test(data=test_data_1)
+        def test1(self, dict_):
+            """Case test
+            """
+            return self.case_test(dict_)
+
+
+    if __name__ == '__main__':
+        GenRandTest('predictor.predictor').run_tests()
+  learner_created: false
+- name: tests.py
+  visible: false
+  text: |
+    from test.tests import GenRandTest
+
+    if __name__ == '__main__':
+        GenRandTest('predictor.predictor').run_tests()
+  learner_created: false
+feedback_link: https://hyperskill.org/learn/step/12095#comment
+status: Solved
+feedback:
+  message: Congratulations!
+  time: "Wed, 14 Jun 2023 18:43:13 UTC"
+record: 1

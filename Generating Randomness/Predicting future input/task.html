@@ -1,0 +1,39 @@
+<div class="step-text">
+<h5 id="description">Description</h5>
+<p>We will make the simplest version of AI (yes, AI is not only about neural networks) to predict the next character of the user input. You will be surprised how often people repeat the same patterns!</p>
+<p>Imagine the following: after the second stage for a string <code class="java">0101010100101001010101000111101010010101010010101010101</code> we have calculated the amount of a certain character (<code class="java">0</code> or <code class="java">1</code>) that follows a specific triad of numbers:  <code class="java">'000': [0, 1], '001': [4, 1], '010': [5, 16], '011': [0, 1], '100': [1, 4], '101': [16, 0], '110': [0, 1], '111': [1, 1]</code>. Now, the user enters the sequence <code class="java">001110</code>. How can we foresee the next numbers?</p>
+<p>Starting with the 4th character, we can predict the input based on the triads obtained in the previous stage. We've learned that the combination <code class="java">001</code> (the first three characters from the example above) was followed by a <code class="java">0</code> in four cases out of five. So, the estimated probability that the user will enter <code class="java">0</code> as the fourth character is 4/5 = 80%. For the probability of <code class="java">1</code> is 1/5 = 20%. We can predict <code class="java">0</code> as the fourth character. Unfortunately, we didn't guess correctly, but let's continue. In the same way, the 5th character is more likely to be <code class="java">1</code> based on statistics for the triad preceding it (<code class="java">011</code>). This time, we are right.</p>
+<p>Of course, in this case, there is no need to convert quantity to probability, since we consider that the most likely symbol is the most frequently occurring symbol after a certain triad. But it is better to think in probabilities and practice calculating it. Though in the solution, we won't check the way, you've defined the character.</p>
+<p>Now, you're invited to write a program, which will sequentially scan three characters of the user's sequence at a time and make a prediction of what goes next.</p>
+<h5 id="objectives">Objectives</h5>
+<p>In this stage, your program should:</p>
+<ol>
+<li>Take and preprocess user input as described in stage 1;</li>
+<li>Calculate user statistics using triads as described in stage 2. Don't output the statistics this time;</li>
+<li>Ask the user to enter another test string of <code class="java">0</code> and <code class="java">1</code>. We'll predict and preprocess the new input in the same way as in the first step, but the minimal length of a string is four: 3 characters for prediction, 1 for accuracy estimation. If this is not the case — ask to enter a whole new string again. Use this text: <code class="java">Please enter a test string containing 0 or 1:</code>;</li>
+<li>Going through the string entered by the user, estimate the frequency of occurrence of <code class="java">0</code> or <code class="java">1</code> obtained in step 2 for each triad except the last one, and generate predictions. For example, if the count of <code class="java">0</code> for the current triad is higher, the program should predict <code class="java">0</code>, otherwise, predict <code class="java">1</code>. If the counts are equal, pick the prediction at random. Save the predictions in a new variable and print them on a new line after a line with the following text — <code class="java">predictions:</code>;</li>
+<li>Test the accuracy of the predictor by comparing the real input (without first three characters) and the predictions. As the final output, print the line <code class="java">Computer guessed right N out of M symbols (ACC %)</code>, where <code class="java">N</code> is the number of correctly guessed symbols, <code class="java">M</code> is the total length of the test input, and <code class="java">ACC</code> is the accuracy value with 0.01% precision — round to two decimal places. Remember to exclude the first three symbols from the user's test string from the calculation!</li>
+</ol>
+<h5 id="example">Example</h5>
+<p>The greater-than symbol followed by a space (<code class="java">&gt; </code>) represents the user input. Note that it's not part of the input.</p>
+<pre><code class="language-no-highlight">Print a random string containing 0 or 1:
+
+&gt; 0101001010010101011111100010010110000101010101010100101
+The current data length is 55, 45 symbols left
+Print a random string containing 0 or 1:
+
+&gt; 01010101001010010101010001111001010010101010010101010101
+
+Final data string:
+010100101001010101111110001001011000010101010101010010101010101001010010101010001111001010010101010010101010101
+
+
+Please enter a test string containing 0 or 1:
+
+&gt; 0110001010100101
+predictions:
+1011010101101
+
+Computer guessed 10 out of 13 symbols right (76.92 %)</code></pre>
+
+</div>

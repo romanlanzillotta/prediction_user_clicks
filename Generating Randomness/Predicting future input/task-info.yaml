@@ -1,0 +1,169 @@
+type: edu
+files:
+- name: predictor/predictor.py
+  visible: true
+  text: |
+    # write your code here
+  learner_created: false
+- name: test/__init__.py
+  visible: false
+  learner_created: false
+- name: test/tests.py
+  visible: false
+  text: |-
+    import re
+
+    from hstest import CheckResult, StageTest, dynamic_test, TestedProgram
+
+    ASK_RANDOM_STRING = "Print a random string containing 0 or 1:"
+    ASK_TEST_STRING = "Please enter a test string containing 0 or 1:"
+
+    # Case test
+    test_data_1 = [
+        {
+            "start": {"expected": ASK_RANDOM_STRING, "feedback": "The program should ask for a random string!"},
+            "test_cases": [
+                {
+                    "case": "1010101101010",
+                    "verify": [
+                        {
+                            "expected": "current data length",
+                            "feedback": "'current data length' is not found in the output!"},
+                        {"expected": "13", "feedback": "Value for 'data length' is wrong!"},
+                        {"expected": "87", "feedback": "Value for for 'symbol left' is wrong!"},
+                        {"expected": ASK_RANDOM_STRING, "feedback": f"The program should ask for a random string!"},
+                    ]
+                },
+                {
+                    "case": "1010101101010_some_wrong_symbols",
+                    "verify": [
+                        {
+                            "expected": "current data length",
+                            "feedback": "'current data length' is not found in the output!"},
+                        {"expected": "26", "feedback": "Value for 'data length' is wrong!"},
+                        {"expected": "74", "feedback": "Value for for 'symbol left' is wrong!"},
+                        {"expected": ASK_RANDOM_STRING, "feedback": f"{ASK_RANDOM_STRING} is not found in output!"},
+                    ]
+                },
+                {
+                    "case": "1010100111001010010101001010100001010001",
+                    "verify": [
+                        {
+                            "expected": "current data length",
+                            "feedback": "'current data length' is not found in the output!"
+                        },
+                        {"expected": "66", "feedback": "Value for 'data length' is wrong!"},
+                        {"expected": "34", "feedback": "Value for for 'symbol left' is wrong!"},
+                        {"expected": ASK_RANDOM_STRING, "feedback": f"{ASK_RANDOM_STRING} is not found in output!"},
+                    ]
+                },
+                {
+                    "case": "01010000100101011010001001000101011101000101010010100101",
+                    "verify": [
+                        {
+                            "expected": "Final data string:",
+                            "feedback": "'Final data string:' is not found in the output!"
+                        },
+                        {
+                            "expected": "1010101101010101010011100101001010100101010000101000101010000100101011010001001000101011101000101010010100101",
+                            "feedback": "Final data string is wrong!"
+                        },
+                        {
+                            "expected": ASK_TEST_STRING,
+                            "feedback": f"{ASK_TEST_STRING} is not found in the output!"
+                        },
+                    ]
+                },
+                {
+                    "case": "010",
+                    "verify": [
+                        {
+                            "expected": ASK_TEST_STRING,
+                            "feedback": "When the test string length is less than 4, the program should ask again!"
+                        },
+                    ]
+                },
+                {
+                    "case": "010000101010101010001101010011110101101101010110111011110011",
+                    "verify": [
+                        {
+                            "expected": "predictions:",
+                            "feedback": "'predictions' is not found in the output!"
+                        },
+                        {
+                            "expected": "Computer guessed",
+                            "feedback": "'Computer guessed' is not found in the output!"
+                        },
+                        {
+                            "expected": "%",
+                            "feedback": "'%' is not found in the output!"
+                        },
+                    ]
+                },
+            ]
+        },
+    ]
+
+
+    class GenRandTest(StageTest):
+
+        def __init__(self, *args, **kwargs):
+            super().__init__(*args, **kwargs)
+            self.output = None
+
+        def case_test(self, dict_):
+            """Tests case/expected"""
+            t = TestedProgram()
+            self.output = t.start()
+            if dict_["start"]["expected"].lower() not in self.output.lower():
+                return CheckResult.wrong(dict_["start"]["feedback"])
+
+            for test_case in dict_["test_cases"]:
+                self.output = t.execute(test_case["case"])
+                for item in test_case["verify"]:
+                    if item["expected"].lower() not in self.output.lower():
+                        return CheckResult.wrong(item["feedback"])
+            return CheckResult.correct()
+
+        @dynamic_test(data=test_data_1)
+        def test1(self, dict_):
+            """Tests invalid option,
+            non scores messages
+            """
+            return self.case_test(dict_)
+
+        @dynamic_test()
+        def test2(self):
+            pattern = r'[0-9]+\.[0-9]+'
+            prob = re.findall(pattern, self.output)
+            if not prob:
+                return CheckResult.wrong("Accuracy value not found in the output!")
+            try:
+                prob = float(prob[0])
+            except IndexError:
+                return CheckResult.wrong("Accuracy value not found in the output!")
+            except ValueError:
+                return CheckResult.wrong("Could not convert accuracy value to float!")
+
+            if prob < 60:
+                return CheckResult.wrong("Accuracy value is too low!")
+            return CheckResult.correct()
+
+
+    if __name__ == '__main__':
+        GenRandTest('predictor.predictor').run_tests()
+  learner_created: false
+- name: tests.py
+  visible: false
+  text: |
+    from test.tests import GenRandTest
+
+    if __name__ == '__main__':
+        GenRandTest('predictor.predictor').run_tests()
+  learner_created: false
+feedback_link: https://hyperskill.org/learn/step/12097#comment
+status: Solved
+feedback:
+  message: Congratulations!
+  time: "Thu, 15 Jun 2023 15:18:03 UTC"
+record: 3

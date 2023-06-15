@@ -1,0 +1,38 @@
+<div class="step-text">
+<h5 id="description">Description</h5>
+<p>To train the machine to predict the next user input, we need to collect data about the user. We will ask them to press <code class="java">0</code>'s and <code class="java">1</code>'s on the keyboard in an unpredictable order. These data will be kept in a string of the format <code class="java">011100101010…</code> Do not consider other characters. If a user makes a mistake and presses <code class="java">2</code> instead of <code class="java">1</code> or enters characters separated by commas, spaces or any other character — just exclude them from the input string.</p>
+<h5 id="objectives">Objectives</h5>
+<p>In this stage, your program should:</p>
+<ol>
+<li>Store the value of the minimum length of a string of zeros and ones that the user must enter as a constant. Specify the minimum string length equal to <code class="java">100</code> — this should allow you to collect enough statistics without taking too much of the user's time;</li>
+<li>Ask a user to enter a random string of <code class="java">0</code> and <code class="java">1</code>. Use this statement: <code class="java">Print a random string containing 0 or 1:</code>;</li>
+<li>Read user input and filter out inappropriate symbols from each user input. Remove all characters except <code class="java">1</code> and <code class="java">0</code>. For example, if a user entered <code class="java">1.0,1 120</code>, then after filtering it should be <code class="java">10110</code>;</li>
+<li>Append the processed string to the general string containing all the data from the inputs;</li>
+<li>Keep asking the user for new input strings and appending them to the general string until the length of the general string is equal or exceeds <code class="java">100</code>. If it exceeds 100, don't remove extra <code class="java">1</code> and <code class="java">0</code>: 100 symbols are the minimum required length, but the more data we have, the better;</li>
+<li>Output the final data string.</li>
+</ol>
+<p>Inform the user how many characters they have already entered, and how many are left, before asking to enter characters again. Use this pattern: <code class="java">Current data length is X, Y symbols left</code>.</p>
+<h5 id="example">Example</h5>
+<p>The greater-than symbol followed by a space (<code class="java">&gt; </code>) represents the user input. Note that it's not part of the input.</p>
+<p>For simplicity, we will limit ourselves to a string of length 20 in this example.</p>
+<pre><code class="language-no-highlight">Print a random string containing 0 or 1:
+
+&gt; 01000111001
+Current data length is 11, 9 symbols left
+Print a random string containing 0 or 1:
+
+&gt; 2345
+Current data length is 11, 9 symbols left
+Print a random string containing 0 or 1:
+
+&gt; 1010456
+Current data length is 15, 5 symbols left
+Print a random string containing 0 or 1:
+
+&gt; 0100010
+
+Final data string:
+0100011100110100100010
+</code></pre>
+
+</div>
